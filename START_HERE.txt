@@ -1,0 +1,17 @@
+ExpenseFlow - Quick Start
+
+1. Extract this ZIP.
+2. Open the extracted business_expense_management_pro folder.
+3. Double-click run.bat, or use PowerShell:
+   venv\Scripts\python.exe -m pip install -r requirements.txt
+   venv\Scripts\python.exe app.py
+4. Open http://127.0.0.1:5000
+
+Default admin (fresh database):
+Email: admin@expenseflow.local
+Password: Admin@12345
+
+Important:
+- The app automatically migrates databases created by older ExpenseFlow versions.
+- Do not delete database.db if you need your existing data.
+- If you ever want a completely fresh demo database, stop the app, back up database.db, then delete it and start again.

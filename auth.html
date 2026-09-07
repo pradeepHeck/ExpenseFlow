@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ExpenseFlow — Sign in</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+</head>
+
+<body class="auth-body">
+    <div class="auth-bg"></div>
+    <div class="auth-shell">
+        <section class="auth-hero">
+            <div class="brand big"><span class="brand-mark">₹</span> ExpenseFlow</div><span class="eyebrow">BUSINESS
+                FINANCE • SMART CONTROL</span>
+            <h1>Turn financial data into <span>clear decisions.</span></h1>
+            <p>Manage income, expenses, budgets, reports and business activity from one polished workspace.</p>
+            <div class="hero-pills"><span>✓ Secure accounts</span><span>✓ Live analytics</span><span>✓ Exportable
+                    reports</span></div>
+        </section>
+        <section class="auth-card">{% with messages=get_flashed_messages(with_categories=true) %}{% for c,m in messages
+            %}<div class="toast toast-{{c}}">{{m}}</div>{% endfor %}{% endwith %}<div class="tabs"><button
+                    class="tab active" data-target="loginPanel">Sign in</button><button class="tab"
+                    data-target="registerPanel">Create account</button></div>
+            <div id="loginPanel" class="auth-panel active">
+                <h2>Welcome back</h2>
+                <p>Access your financial workspace.</p>
+                <form method="post" action="{{url_for('login')}}"><label>Email<input type="email" name="email"
+                            placeholder="you@company.com" required></label><label>Password<div class="password"><input
+                                type="password" name="password" placeholder="Your password" required><button
+                                type="button" data-toggle>Show</button></div></label><button class="primary full"
+                        type="submit">Sign in <span>→</span></button></form><small>Admin access is enabled by the
+                    deployment configuration.</small>
+            </div>
+            <div id="registerPanel" class="auth-panel">
+                <h2>Create account</h2>
+                <p>Start managing your finances.</p>
+                <form method="post" action="{{url_for('register')}}"><label>Full name<input name="name"
+                            placeholder="Your full name" required></label><label>Email<input type="email" name="email"
+                            placeholder="you@company.com" required></label><label>Password<input type="password"
+                            name="password" minlength="8" placeholder="At least 8 characters"
+                            required></label><label>Confirm password<input type="password" name="confirm_password"
+                            minlength="8" placeholder="Repeat password" required></label><button class="primary full"
+                        type="submit">Create account <span>→</span></button></form>
+            </div>
+        </section>
+    </div>
+    <script src="{{url_for('static',filename='app.js')}}"></script>
+</body>
+
+</html>

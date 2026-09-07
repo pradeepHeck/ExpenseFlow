@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% block content %}<div class="form-page reveal">
+    <div class="form-card"><span class="eyebrow">FINANCE</span>
+        <h1>{{heading}}</h1>
+        <p>{{subtitle}}</p>
+        <form method="post" {% if upload %}enctype="multipart/form-data" {% endif %}>
+            <div class="form-grid">{{fields|safe}}</div>
+            <div class="form-actions"><button class="primary" type="submit">{{button}} <span>→</span></button><a
+                    class="outline" href="{{cancel}}">Cancel</a></div>
+        </form>
+    </div>
+</div>{% endblock %}

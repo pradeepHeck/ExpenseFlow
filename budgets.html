@@ -1,0 +1,63 @@
+{% extends 'base.html' %}{% block title %}Budgets — ExpenseFlow{% endblock %}{% block content %}<div
+    class="page-head reveal">
+    <div><span class="eyebrow">CONTROL</span>
+        <h1>Budgets</h1>
+        <p>Set monthly limits and keep spending under control.</p>
+    </div>
+</div>
+<div class="grid-2">
+    <div class="panel reveal">
+        <div class="panel-head">
+            <div>
+                <h3>Create budget</h3>
+                <p>Monthly or category-based</p>
+            </div>
+        </div>
+        <form method="post" class="form-grid"><label>Name<input name="name" required
+                    placeholder="Monthly operating budget"></label><label>Amount (₹)<input name="amount" type="number"
+                    min="1" step="0.01" required></label><label>Month<input name="month" type="month"
+                    value="{{current_month}}" required></label><label>Category<select name="category">
+                    <option value="">All expenses</option>{% for c in categories %}<option>{{c.name}}</option>{% endfor
+                    %}
+                </select></label><button class="primary full">Create budget</button></form>
+    </div>
+    <div class="panel reveal">
+        <div class="panel-head">
+            <div>
+                <h3>Budget rules</h3>
+                <p>Use category budgets for tighter control.</p>
+            </div>
+        </div>
+        <div class="callout">Budgets are compared against actual expense records for the selected month.</div>
+    </div>
+</div>
+<div class="panel reveal">
+    <div class="panel-head">
+        <h3>Your budgets</h3>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Month</th>
+                    <th>Category</th>
+                    <th>Limit</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>{% for b in rows %}<tr>
+                    <td><b>{{b.name}}</b></td>
+                    <td>{{b.month}}</td>
+                    <td>{{b.category or 'All expenses'}}</td>
+                    <td class="money">₹{{'%.2f'|format(b.amount)}}</td>
+                    <td class="actions">
+                        <form method="post" action="{{url_for('delete_budget',item_id=b.id)}}"
+                            onsubmit="return confirm('Delete this budget?')"><button>Delete</button></form>
+                    </td>
+                </tr>{% else %}<tr>
+                    <td colspan="5" class="empty">No budgets created yet.</td>
+                </tr>{% endfor %}</tbody>
+        </table>
+    </div>
+</div>{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Expenses — ExpenseFlow{% endblock %}
+{% block content %}
+<div class="page-head reveal">
+    <div>
+        <span class="eyebrow">MANAGEMENT</span>
+        <h1>Expenses</h1>
+        <p>Track every business expense in one place.</p>
+    </div>
+    <div class="quick">
+        <a class="outline" href="{{ url_for('export', kind='expenses') }}">↓ Export CSV</a>
+        <a class="primary" href="{{ url_for('add_expense') }}">＋ Add expense</a>
+    </div>
+</div>
+
+<div class="panel reveal">
+    <form class="filters" method="get">
+        <input name="search" value="{{ search }}" placeholder="Search expenses...">
+        <select name="category">
+            <option value="">All categories</option>
+            {% for c in categories %}
+                <option value="{{ c.name }}" {% if cat == c.name %}selected{% endif %}>{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="date" name="start_date" value="{{ start }}">
+        <input type="date" name="end_date" value="{{ end }}">
+        <button class="primary" type="submit">Filter</button>
+        <a class="outline" href="{{ url_for('expenses') }}">Reset</a>
+    </form>
+</div>
+
+<div class="panel reveal">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Expense</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Payment</th>
+                    <th>Receipt</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in rows %}
+                <tr>
+                    <td>
+                        <b>{{ e.title }}</b>
+                        <small>{{ e.description or '—' }}</small>
+                    </td>
+                    <td><span class="badge">{{ e.category }}</span></td>
+                    <td class="money">₹{{ '%.2f'|format(e.amount) }}</td>
+                    <td>{{ e.expense_date }}</td>
+                    <td>{{ e.payment_method or '—' }}</td>
+                    <td>
+                        {% if e.receipt %}
+                            <a class="text-link" target="_blank" href="{{ url_for('receipt', filename=e.receipt) }}">View</a>
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td class="actions">
+                        <a href="{{ url_for('edit_expense', item_id=e.id) }}">Edit</a>
+                        <form method="post" action="{{ url_for('delete_expense', item_id=e.id) }}" onsubmit="return confirm('Delete this expense?')">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="empty">No expenses found. Add your first expense.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

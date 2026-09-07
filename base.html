@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}ExpenseFlow{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar" id="sidebar"><a class="brand"
+                href="{{url_for('admin_dashboard' if session.get('role')=='admin' else 'dashboard')}}"><span
+                    class="brand-mark">₹</span><span>ExpenseFlow</span></a>
+            <div class="side-label">{{'ADMIN CONSOLE' if session.get('role')=='admin' else 'WORKSPACE'}}</div>
+            <nav>
+                {% if session.get('role')=='admin' %}<a href="{{url_for('admin_dashboard')}}">▦
+                    <span>Dashboard</span></a><a href="{{url_for('admin_users')}}">♙ <span>Users</span></a><a
+                    href="{{url_for('admin_transactions')}}">↔ <span>Transactions</span></a><a
+                    href="{{url_for('admin_reports')}}">◫ <span>Reports</span></a><a href="{{url_for('admin_logs')}}">◌
+                    <span>Activity Logs</span></a>
+                {% else %}<a href="{{url_for('dashboard')}}">▦ <span>Dashboard</span></a><a
+                    href="{{url_for('income')}}">↗ <span>Income</span></a><a href="{{url_for('expenses')}}">↘
+                    <span>Expenses</span></a><a href="{{url_for('transactions')}}">↔ <span>Transactions</span></a><a
+                    href="{{url_for('budgets')}}">◷ <span>Budgets</span></a><a href="{{url_for('recurring')}}">⟳
+                    <span>Recurring</span></a><a href="{{url_for('categories')}}">◇ <span>Categories</span></a><a
+                    href="{{url_for('reports')}}">◫ <span>Reports</span></a><a href="{{url_for('notifications')}}">♢
+                    <span>Notifications {% if unread_notifications %}<b class="count">{{unread_notifications}}</b>{%
+                        endif %}</span></a>{% endif %}</nav>
+            <div class="side-bottom"><a href="{{url_for('profile')}}">⚙ <span>Profile</span></a><a
+                    href="{{url_for('logout')}}">↪ <span>Logout</span></a></div>
+        </aside>
+        <main class="main">
+            <header class="topbar"><button class="icon-btn mobile-only" id="menuBtn">☰</button>
+                <div class="top-title">{{'Admin Console' if session.get('role')=='admin' else 'Financial Workspace'}}
+                </div>
+                <div class="top-user">
+                    <div class="avatar">{{(session.get('user_name','U')[0]).upper()}}</div>
+                    <div>
+                        <strong>{{session.get('user_name','User')}}</strong><small>{{session.get('role','user')|capitalize}}</small>
+                    </div>
+                </div>
+            </header>
+            <div class="content">
+                {% with messages=get_flashed_messages(with_categories=true) %}{% for cat,msg in messages %}<div
+                    class="toast toast-{{cat}}">{{msg}}</div>{% endfor %}{% endwith %}{% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    <script src="{{url_for('static',filename='app.js')}}"></script>{% block scripts %}{% endblock %}
+</body>
+
+</html>

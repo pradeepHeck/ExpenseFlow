@@ -1,0 +1,80 @@
+{% extends 'base.html' %}{% block title %}Dashboard — ExpenseFlow{% endblock %}{% block content %}<div
+    class="page-head reveal">
+    <div><span class="eyebrow">OVERVIEW</span>
+        <h1>Good to see you, {{session.user_name}}.</h1>
+        <p>Your financial snapshot at a glance.</p>
+    </div>
+    <div class="quick"><a class="outline" href="{{url_for('add_income')}}">＋ Income</a><a class="primary"
+            href="{{url_for('add_expense')}}">＋ Expense</a></div>
+</div>
+<div class="stats grid-4">
+    <div class="stat reveal"><span class="stat-icon">↗</span>
+        <div><small>Total income</small>
+            <h2 data-counter="{{income}}">₹{{'%.2f'|format(income)}}</h2>
+            <p>{{income_count}} records</p>
+        </div>
+    </div>
+    <div class="stat reveal"><span class="stat-icon red">↘</span>
+        <div><small>Total expenses</small>
+            <h2 data-counter="{{expense}}">₹{{'%.2f'|format(expense)}}</h2>
+            <p>{{expense_count}} records</p>
+        </div>
+    </div>
+    <div class="stat reveal"><span class="stat-icon blue">₹</span>
+        <div><small>Current balance</small>
+            <h2>₹{{'%.2f'|format(balance)}}</h2>
+            <p>Income minus expenses</p>
+        </div>
+    </div>
+    <div class="stat reveal"><span class="stat-icon">◷</span>
+        <div><small>Budget remaining</small>
+            <h2>₹{{'%.2f'|format(budget-used)}}</h2>
+            <p>{{'%.0f'|format((used/budget*100) if budget else 0)}}% used this month</p>
+        </div>
+    </div>
+</div>
+<div class="grid-2 analytics">
+    <div class="panel reveal">
+        <div class="panel-head">
+            <div>
+                <h3>Spending trend</h3>
+                <p>Monthly expense activity</p>
+            </div><span class="live">● Live data</span>
+        </div><canvas id="monthlyChart"></canvas>
+    </div>
+    <div class="panel reveal">
+        <div class="panel-head">
+            <div>
+                <h3>Expense categories</h3>
+                <p>Where your money goes</p>
+            </div>
+        </div><canvas id="categoryChart"></canvas>
+    </div>
+</div>
+<div class="grid-2">
+    <div class="panel reveal">
+        <div class="panel-head">
+            <div>
+                <h3>Budget health</h3>
+                <p>{{'%.0f'|format((used/budget*100) if budget else 0)}}% of monthly budget used</p>
+            </div><a class="text-link" href="{{url_for('budgets')}}">Manage</a>
+        </div>
+        <div class="progress">
+            <span style="width: {{ [100, ((used / budget * 100) if budget else 0)] | min }}%;"></span>
+        </div>
+        <div class="budget-row"><b>₹{{'%.0f'|format(used)}}</b><span>used of ₹{{'%.0f'|format(budget)}}</span></div>
+    </div>
+    <div class="panel reveal">
+        <div class="panel-head">
+            <div>
+                <h3>Recent expenses</h3>
+                <p>Latest recorded spending</p>
+            </div><a class="text-link" href="{{url_for('expenses')}}">View all</a>
+        </div>{% for r in recent %}<div class="mini-row"><span class="dot">{{r['title'][0]|upper}}</span>
+            <div><b>{{r['title']}}</b><small>{{r['category']}} · {{r['expense_date']}}</small></div>
+            <strong>₹{{'%.2f'|format(r['amount'])}}</strong>
+        </div>{% else %}<div class="empty">No expenses yet. Add your first one.</div>{% endfor %}
+    </div>
+</div>{% endblock %}{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}

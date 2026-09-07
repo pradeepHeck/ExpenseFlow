@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Expense — ExpenseFlow{% endblock %}
+
+{% block content %}
+<div class="form-page reveal">
+    <div class="form-card">
+        <span class="eyebrow">FINANCE</span>
+        <h1>Edit Expense</h1>
+        <p>Update the selected transaction.</p>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-grid">
+                <label>
+                    Title *
+                    <input type="text" name="title" value="{{ expense.title }}" required>
+                </label>
+
+                <label>
+                    Category *
+                    <select name="category" required>
+                        {% for c in categories %}
+                            <option value="{{ c.name }}" {% if c.name == expense.category %}selected{% endif %}>
+                                {{ c.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <label>
+                    Amount (₹) *
+                    <input type="number" name="amount" value="{{ expense.amount }}" min="0.01" step="0.01" required>
+                </label>
+
+                <label>
+                    Date *
+                    <input type="date" name="expense_date" value="{{ expense.expense_date }}" required>
+                </label>
+
+                <label>
+                    Payment method
+                    <input type="text" name="payment_method" value="{{ expense.payment_method or '' }}">
+                </label>
+
+                <label>
+                    Receipt
+                    {% if expense.receipt %}
+                        <div>
+                            <a class="text-link" href="{{ url_for('receipt', filename=expense.receipt) }}" target="_blank" rel="noopener">
+                                View current receipt
+                            </a>
+                        </div>
+                    {% else %}
+                        <span class="muted">No receipt uploaded.</span>
+                    {% endif %}
+                    <input type="file" name="receipt" accept=".pdf,.png,.jpg,.jpeg,.webp">
+                    <small class="muted">Choose a new file only if you want to replace the current receipt.</small>
+                </label>
+
+                <label class="full">
+                    Description
+                    <textarea name="description" rows="5">{{ expense.description or '' }}</textarea>
+                </label>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="primary">Update expense →</button>
+                <a class="outline" href="{{ url_for('expenses') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}{% block title %}Categories — ExpenseFlow{% endblock %}{% block content %}<div
+    class="page-head reveal">
+    <div><span class="eyebrow">ORGANIZE</span>
+        <h1>Categories</h1>
+        <p>Customize the labels used across your financial records.</p>
+    </div>
+</div>
+<div class="grid-2">
+    <div class="panel reveal">
+        <h3>Add category</h3>
+        <form method="post" class="form-grid"><label>Name<input name="name" required
+                    placeholder="Client travel"></label><label>Type<select name="kind">
+                    <option value="expense">Expense</option>
+                    <option value="income">Income</option>
+                </select></label><button class="primary full">Add category</button></form>
+    </div>
+    <div class="panel reveal">
+        <h3>Your custom categories</h3>{% for r in rows %}<div class="mini-row">
+            <div><b>{{r.name}}</b><small>{{r.kind|capitalize}}</small></div>
+            <form method="post" action="{{url_for('category_delete',item_id=r.id)}}"><button class="danger-link"
+                    onclick="return confirm('Delete this category?')">Delete</button></form>
+        </div>{% else %}<div class="empty">No custom categories yet.</div>{% endfor %}
+    </div>
+</div>{% endblock %}

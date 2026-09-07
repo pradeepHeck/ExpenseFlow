@@ -1,0 +1,27 @@
+{% extends 'base.html' %}{% block title %}Activity Logs — ExpenseFlow{% endblock %}{% block content %}<div
+    class="page-head reveal">
+    <div><span class="eyebrow">AUDIT</span>
+        <h1>Activity logs</h1>
+        <p>Recent security and system actions.</p>
+    </div>
+</div>
+<div class="panel reveal">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>{% for r in rows %}<tr>
+                    <td>{{r.created_at}}</td>
+                    <td>{{r.name or 'System'}}</td>
+                    <td><b>{{r.action}}</b></td>
+                    <td>{{r.details or '—'}}</td>
+                </tr>{% endfor %}</tbody>
+        </table>
+    </div>
+</div>{% endblock %}

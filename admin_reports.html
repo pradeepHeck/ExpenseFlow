@@ -1,0 +1,30 @@
+{% extends 'base.html' %}{% block title %}Admin Reports — ExpenseFlow{% endblock %}{% block content %}<div
+    class="page-head reveal">
+    <div><span class="eyebrow">ADMIN ANALYTICS</span>
+        <h1>Reports</h1>
+        <p>System-wide spending trends and user comparison.</p>
+    </div>
+</div>
+<div class="grid-2">
+    <div class="panel reveal">
+        <h3>Monthly system expenses</h3><canvas id="sysChart"></canvas>
+    </div>
+    <div class="panel reveal">
+        <h3>Top users by expense</h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Expense</th>
+                    </tr>
+                </thead>
+                <tbody>{% for u in users %}<tr>
+                        <td>{{u.name}}</td>
+                        <td class="money">₹{{'%.2f'|format(u.expense)}}</td>
+                    </tr>{% endfor %}</tbody>
+            </table>
+        </div>
+    </div>
+</div>{% endblock %}{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Admin Dashboard — ExpenseFlow
+{% endblock %}
+
+{% block content %}
+
+<div class="page-head reveal">
+    <div>
+        <span class="eyebrow">ADMIN CONSOLE</span>
+        <h1>System overview</h1>
+        <p>Monitor users, transactions and financial activity.</p>
+    </div>
+</div>
+
+<div class="stats grid-4">
+
+    <div class="stat reveal">
+        <span class="stat-icon">♙</span>
+
+        <div>
+            <small>Total users</small>
+            <h2>{{ stats.users }}</h2>
+            <p>{{ stats.active or 0 }} active</p>
+        </div>
+    </div>
+
+
+    <div class="stat reveal">
+        <span class="stat-icon">↗</span>
+
+        <div>
+            <small>System income</small>
+            <h2>₹{{ '%.0f'|format(fin.income) }}</h2>
+            <p>All users</p>
+        </div>
+    </div>
+
+
+    <div class="stat reveal">
+        <span class="stat-icon red">↘</span>
+
+        <div>
+            <small>System expenses</small>
+            <h2>₹{{ '%.0f'|format(fin.expense) }}</h2>
+            <p>All users</p>
+        </div>
+    </div>
+
+
+    <div class="stat reveal">
+        <span class="stat-icon blue">₹</span>
+
+        <div>
+            <small>System balance</small>
+            <h2>₹{{ '%.0f'|format(fin.income - fin.expense) }}</h2>
+            <p>Income minus expense</p>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="grid-2">
+
+    <div class="panel reveal">
+        <h3>Top expense categories</h3>
+
+        <canvas id="adminCats"></canvas>
+    </div>
+
+
+    <div class="panel reveal">
+
+        <h3>Recent activity</h3>
+
+        {% for r in recent %}
+
+        <div class="mini-row">
+
+            <span class="dot">
+                {{ (r.name or 'S')[0]|upper }}
+            </span>
+
+            <div>
+                <b>{{ r.action }}</b>
+
+                <small>
+                    {{ r.name or 'System' }} · {{ r.created_at }}
+                </small>
+            </div>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+            No activity yet.
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

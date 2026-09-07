@@ -1,0 +1,40 @@
+{% extends 'base.html' %}{% block title %}Users — Admin{% endblock %}{% block content %}<div class="page-head reveal">
+    <div><span class="eyebrow">ADMIN</span>
+        <h1>Users</h1>
+        <p>Manage account access and status.</p>
+    </div>
+</div>
+<div class="panel reveal">
+    <form class="filters"><input name="search" value="{{search}}" placeholder="Search users..."><button
+            class="primary">Search</button></form>
+</div>
+<div class="panel reveal">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>{% for u in rows %}<tr>
+                    <td><b>{{u.name}}</b></td>
+                    <td>{{u.email}}</td>
+                    <td>{{u.role}}</td>
+                    <td><span class="badge">{{'Active' if u.active else 'Inactive'}}</span></td>
+                    <td>{{u.created_at}}</td>
+                    <td class="actions">{% if u.role!='admin' %}<form method="post"
+                            action="{{url_for('admin_toggle_user',user_id=u.id)}}"><button>{{'Deactivate' if u.active
+                                else 'Activate'}}</button></form>
+                        <form method="post" action="{{url_for('admin_delete_user',user_id=u.id)}}"
+                            onsubmit="return confirm('Delete this user and their records?')"><button>Delete</button>
+                        </form>{% else %}Protected{% endif %}
+                    </td>
+                </tr>{% endfor %}</tbody>
+        </table>
+    </div>
+</div>{% endblock %}
